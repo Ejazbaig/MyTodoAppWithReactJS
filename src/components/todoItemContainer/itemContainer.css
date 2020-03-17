@@ -1,0 +1,57 @@
+.trashIcon {
+  /* padding: 10px; */
+  margin-right: 10px;
+  color: firebrick;
+  font-size: 25px;
+}
+
+.todoItemContainer {
+  margin-bottom: 5px;
+  border: 2px solid blue;
+  border-radius: 10px;
+}
+
+.strikeThrough {
+  width: 70%;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin: 0px;
+  outline: none;
+  display: block;
+  border: 0;
+  font-size: 20px;
+  overflow-wrap: break-word;
+  text-decoration: line-through;
+}
+
+.todoCheckBox {
+  margin-top: 5px;
+  margin-right: 10px;
+}
+
+input[type="checkbox"] {
+  width: 15px;
+  height: 15px;
+}
+
+.saveTaskTextbox {
+  width: 70%;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin: 0px;
+  outline: none;
+  display: block;
+  border: 0;
+  font-size: 20px;
+  overflow-wrap: break-word;
+}
+
+.strike {
+  font-size: 20px;
+  margin-right: 10px;
+}
+
+.editIcon {
+  font-size: 25px;
+  margin-right: 10px;
+}
