@@ -6,9 +6,10 @@
 }
 
 .todoItemContainer {
-  margin-bottom: 5px;
+  margin-top: 5px;
   border: 2px solid blue;
   border-radius: 10px;
+  width: 90%;
 }
 
 .strikeThrough {
@@ -27,11 +28,12 @@
 .todoCheckBox {
   margin-top: 5px;
   margin-right: 10px;
+  height: 35px;
 }
 
 input[type="checkbox"] {
-  width: 15px;
-  height: 15px;
+  width: 20px;
+  height: 17px;
 }
 
 .saveTaskTextbox {
@@ -54,4 +56,11 @@ input[type="checkbox"] {
 .editIcon {
   font-size: 25px;
   margin-right: 10px;
+}
+
+.strikeThrough,
+.saveTaskTextbox {
+  padding-bottom: 10px;
+  padding-left: 20px;
+  padding-right: 2%;
 }

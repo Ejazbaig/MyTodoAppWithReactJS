@@ -1,3 +1,8 @@
+body,
+html {
+  overflow-x: hidden !important;
+}
+
 .App {
   text-align: center;
 }
@@ -17,31 +22,33 @@
   margin: 0px;
 }
 
-/* body{
-  background-image: url(image.jpg);
-  background-repeat: no-repeat;
-  background-size: cover;
-} */
-
-.todoActionBar {
-  margin: 10px;
+.todoActionBar,
+.todoInputBar {
+  margin: 1%;
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 
 .addTaskTextbox {
-  width: 600px;
+  width: 60%;
   height: 30px;
+  margin-top: 10px;
+  margin-left: 10px;
   text-align: center;
   border-radius: 12px;
   margin-right: 12px;
   outline: none;
 }
 
+.todoAddButton {
+  margin-top: 10px;
+  height: 35px;
+  width: 10%;
+}
+
 .todoButton,
 .todoAddButton {
-  height: 35px;
-  width: 155px;
   background-image: linear-gradient(
     to right top,
     #a3ced3,
@@ -55,8 +62,14 @@
   color: white;
   padding: 1px;
   text-align: center;
-  margin-right: 12px;
+  margin-right: 5px;
   outline: none;
+  display: block;
+}
+
+.todoButton {
+  height: 40px;
+  width: 150px;
 }
 
 .todoListWrapper {
@@ -81,42 +94,29 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 10px;
   border: none;
   margin: auto;
-  width: 70%;
-  padding: 3px;
+  margin-bottom: 10px;
+  width: 85%;
+  padding: 20px;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
 }
 
-.todoDescription {
-  width: 70%;
-  overflow-wrap: break-word;
-  padding-right: 10px;
-  padding-left: 10px;
+.todoItemContainer:hover {
+  box-shadow: 2px 2px 2px 3px rgba(0, 0, 0, 0.2);
 }
 
-.todoItemTemplate {
-  visibility: hidden;
-}
-
-.strikeThrough {
-  text-decoration: line-through;
-}
-
-.selectDeselectAllContainer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 160px;
-  height: 33px;
-}
-
-.todoSelectDeslectAllCheckBox {
-  margin-right: 2px;
+.todoSelectDeslectAll {
+  font-size: 80%;
+  position: relative;
+  text-align: center;
+  display: block;
 }
 
 .selectDeselectLabel {
-  font-size: 13px;
+  font-size: 60%;
+  border: 1px;
 }
 
 [role="button"]:hover {
@@ -132,5 +132,20 @@
 }
 
 .todoSelectDeslectAllCheckBox {
-  margin-top: 5px;
+  vertical-align: middle;
+}
+
+.myHrStyle {
+  border: 0;
+  height: 1px;
+  background-image: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0),
+    rgba(0, 0, 0, 0.5),
+    rgba(0, 0, 0, 0)
+  );
+}
+
+.checkBoxWrapper {
+  width: 52%;
 }

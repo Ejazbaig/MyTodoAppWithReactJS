@@ -8,32 +8,40 @@ class TodoItemContainer extends Component {
   render() {
     const {
       todoItem,
+      todoItemTitle,
       deleteTodoItem,
       todoItemStrikeThrough,
-      handleInputChange,
+      showFullDetailsHandler,
       saveTodoOnEnter,
       id,
       toggledClass,
       checked,
       handleCheckBox,
-      handleEditIcon
+      handleEditIcon,
+      expand
     } = this.props;
     return (
       <div className="todoItemContainer" id="todoItemContainer">
-        <input
-          type="checkbox"
-          className="todoCheckBox"
-          id={id}
-          checked={checked}
-          onChange={handleCheckBox}
-        />
+        <div class="pretty p-icon p-round p-jelly">
+          <input
+            type="checkbox"
+            className="todoCheckBox"
+            id={id}
+            checked={checked}
+            onChange={handleCheckBox}
+          />
+          <div class="state p-primary">
+            <i class="icon mdi mdi-check"></i>
+            <label></label>
+          </div>
+        </div>
         <p
           className={toggledClass ? "strikeThrough" : "saveTaskTextbox"}
           id={id}
           onKeyPress={saveTodoOnEnter}
-          onClick={handleInputChange}
+          onClick={showFullDetailsHandler}
         >
-          {todoItem}
+          {expand === true ? todoItem : todoItemTitle}
         </p>
         <FaEdit className="editIcon" onClick={handleEditIcon} />
         <FiTrash2

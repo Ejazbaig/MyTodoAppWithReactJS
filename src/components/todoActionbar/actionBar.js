@@ -11,19 +11,22 @@ class ActionBar extends Component {
       deleteSelected,
       selectAndDeselectAll,
       checked,
-      edited
+      edited,
+      inputFocus
     } = this.props;
+
     return (
-      <div>
+      <div className="actionBarWrapper">
         <h1 className="mainHeading" id="heading">
           TODO LIST
         </h1>
-        <div className="todoActionBar" id="todoActionBar">
+        <div className="todoInputBar">
           <input
             type="text"
             className="addTaskTextbox"
             id="todoAddTextBox"
             autoFocus
+            ref={inputFocus}
             placeholder="Enter the task to add"
             value={todoItem}
             onChange={handleInputChange}
@@ -31,12 +34,30 @@ class ActionBar extends Component {
           />
           <button
             type="button"
-            className="todoButton"
+            className="todoAddButton"
             id="todoAddbutton"
             onClick={addTodoItem}
           >
             {edited ? "Save" : "Add"}
           </button>
+        </div>
+        <div className="todoActionBar" id="todoActionBar">
+          <div className="checkBoxWrapper">
+            <div class="pretty p-icon p-round p-jelly">
+              <input
+                type="checkbox"
+                role="button"
+                className="todoSelectDeslectAllCheckBox"
+                id="todoSelectDeslectAll"
+                checked={checked}
+                onChange={selectAndDeselectAll}
+              />
+              <div class="state p-primary">
+                <i class="icon mdi mdi-check"></i>
+                <label>Select / Deselect All </label>
+              </div>
+            </div>
+          </div>
           <button
             type="button"
             className="todoButton"
@@ -55,21 +76,8 @@ class ActionBar extends Component {
             {" "}
             Mark/UnMark Selected
           </button>
-          <div className="selectDeselectAllContainer todoButton">
-            <input
-              type="checkbox"
-              role="button"
-              className="todoSelectDeslectAllCheckBox"
-              id="todoSelectDeslectAll"
-              checked={checked}
-              onChange={selectAndDeselectAll}
-            />
-            <label className="selectDeselectLabel">
-              Select / Deselect All{" "}
-            </label>
-          </div>
         </div>
-        <hr />
+        <hr className="myHrStyle" />
       </div>
     );
   }
