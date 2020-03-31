@@ -18,11 +18,21 @@ class TodoItemContainer extends Component {
       checked,
       handleCheckBox,
       handleEditIcon,
-      expand
+      expand,
+      dragOnStart,
+      dragOnOver,
+      dragOnDrop
     } = this.props;
     return (
-      <div className="todoItemContainer" id="todoItemContainer">
-        <div class="pretty p-icon p-round p-jelly">
+      <div
+        className="todoItemContainer"
+        id="todoItemContainer"
+        draggable={true}
+        onDragStart={dragOnStart}
+        onDragOver={dragOnOver}
+        onDrop={dragOnDrop}
+      >
+        <div className="pretty p-icon p-round p-jelly">
           <input
             type="checkbox"
             className="todoCheckBox"
@@ -30,8 +40,8 @@ class TodoItemContainer extends Component {
             checked={checked}
             onChange={handleCheckBox}
           />
-          <div class="state p-primary">
-            <i class="icon mdi mdi-check"></i>
+          <div className="state p-primary">
+            <i className="icon mdi mdi-check"></i>
             <label></label>
           </div>
         </div>

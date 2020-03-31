@@ -248,7 +248,51 @@ class App extends Component {
     this.setState({
       todoListDetails: todoListDetails
     });
-    console.log(this.state.todoListDetails);
+  };
+
+  dragOnStart = (e, id) => {
+    e.dataTransfer.setData("id", id);
+  };
+  dragOnOver = (e, id) => {
+    e.preventDefault();
+  };
+  dragOnDrop = (e, id) => {
+    e.preventDefault();
+    let draggedItemId = e.dataTransfer.getData("Id");
+    let todoListDetails = this.state.todoListDetails;
+    let draggedItemIndex = 0;
+    let droppedItemIndex = 0;
+    for (let i = 0; i < todoListDetails.length; i++) {
+      if (todoListDetails[i].id === draggedItemId) {
+        draggedItemIndex = i;
+      }
+      if (todoListDetails[i].id === id) {
+        droppedItemIndex = i;
+      }
+    }
+    if (draggedItemIndex === droppedItemIndex) {
+      return;
+    }
+    if (draggedItemIndex < droppedItemIndex) {
+      let temp = todoListDetails[draggedItemIndex];
+      for (let i = draggedItemIndex; i <= droppedItemIndex; i++) {
+        todoListDetails[i] = todoListDetails[i + 1];
+      }
+      todoListDetails[droppedItemIndex] = temp;
+      this.setState({
+        todoListDetails
+      });
+    }
+    if (draggedItemIndex > droppedItemIndex) {
+      let temp = todoListDetails[draggedItemIndex];
+      for (let i = draggedItemIndex; i >= droppedItemIndex; i--) {
+        todoListDetails[i] = todoListDetails[i - 1];
+      }
+      todoListDetails[droppedItemIndex] = temp;
+      this.setState({
+        todoListDetails
+      });
+    }
   };
 
   render() {
@@ -266,7 +310,7 @@ class App extends Component {
           checked={this.state.checked}
           edited={this.state.editItem}
         />
-        <div className="todoItemWrapper" id="todoItemWrapper">
+        <div className="todoItemWrapper" id="todoItemWrapper" ref={this.myRef}>
           {this.state.todoListDetails.map(item => (
             <TodoItemContainer
               key={item.id}
@@ -284,6 +328,9 @@ class App extends Component {
               handleCheckBox={this.handleCheckBox}
               handleEditIcon={() => this.handleEditIcon(item.id)}
               expand={item.expand}
+              dragOnStart={e => this.dragOnStart(e, item.id)}
+              dragOnOver={e => this.dragOnOver(e, item.id)}
+              dragOnDrop={e => this.dragOnDrop(e, item.id)}
             />
           ))}
         </div>

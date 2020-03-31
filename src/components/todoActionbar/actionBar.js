@@ -43,7 +43,7 @@ class ActionBar extends Component {
         </div>
         <div className="todoActionBar" id="todoActionBar">
           <div className="checkBoxWrapper">
-            <div class="pretty p-icon p-round p-jelly">
+            <div className="pretty p-icon p-round p-jelly">
               <input
                 type="checkbox"
                 role="button"
@@ -52,8 +52,8 @@ class ActionBar extends Component {
                 checked={checked}
                 onChange={selectAndDeselectAll}
               />
-              <div class="state p-primary">
-                <i class="icon mdi mdi-check"></i>
+              <div className="state p-primary">
+                <i className="icon mdi mdi-check"></i>
                 <label>Select / Deselect All </label>
               </div>
             </div>
