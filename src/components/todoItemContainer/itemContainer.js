@@ -3,6 +3,7 @@ import { FiTrash2 } from "react-icons/fi";
 import { FaStrikethrough } from "react-icons/fa";
 import { FaEdit } from "react-icons/fa";
 import "./itemContainer.css";
+import CheckBox from "../checkBox/CheckBox";
 
 class TodoItemContainer extends Component {
   render() {
@@ -32,19 +33,7 @@ class TodoItemContainer extends Component {
         onDragOver={dragOnOver}
         onDrop={dragOnDrop}
       >
-        <div className="pretty p-icon p-round p-jelly">
-          <input
-            type="checkbox"
-            className="todoCheckBox"
-            id={id}
-            checked={checked}
-            onChange={handleCheckBox}
-          />
-          <div className="state p-primary">
-            <i className="icon mdi mdi-check"></i>
-            <label></label>
-          </div>
-        </div>
+        <CheckBox id={id} checked={checked} handleCheckBox={handleCheckBox} />
         <p
           className={toggledClass ? "strikeThrough" : "saveTaskTextbox"}
           id={id}

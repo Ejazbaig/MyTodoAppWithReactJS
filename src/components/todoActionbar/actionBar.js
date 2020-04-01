@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import CheckBox from "../checkBox/CheckBox";
 
 class ActionBar extends Component {
   render() {
@@ -43,20 +44,12 @@ class ActionBar extends Component {
         </div>
         <div className="todoActionBar" id="todoActionBar">
           <div className="checkBoxWrapper">
-            <div className="pretty p-icon p-round p-jelly">
-              <input
-                type="checkbox"
-                role="button"
-                className="todoSelectDeslectAllCheckBox"
-                id="todoSelectDeslectAll"
-                checked={checked}
-                onChange={selectAndDeselectAll}
-              />
-              <div className="state p-primary">
-                <i className="icon mdi mdi-check"></i>
-                <label>Select / Deselect All </label>
-              </div>
-            </div>
+            <CheckBox
+              id="todoSelectDeslectAll"
+              checked={checked}
+              handleCheckBox={selectAndDeselectAll}
+              label={"Select / Deselect All"}
+            />
           </div>
           <button
             type="button"
