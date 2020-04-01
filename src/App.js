@@ -164,11 +164,14 @@ class App extends Component {
   };
 
   handleCheckBox = e => {
-    const todoListDetails = this.state.todoListDetails.map(item => {
+    //changes
+    //map to filter
+    // else if(if (e.target.checked === false) ) to else
+    const todoListDetails = this.state.todoListDetails.filter(item => {
       if (item.id === e.target.id) {
         if (e.target.checked === true) {
           item.checked = true;
-        } else if (e.target.checked === false) {
+        } else {
           item.checked = false;
         }
       }
