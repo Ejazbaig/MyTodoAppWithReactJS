@@ -3,6 +3,7 @@ import ActionBar from "./components/todoActionbar/actionBar";
 import TodoItemContainer from "./components/todoItemContainer/itemContainer";
 import "./App.css";
 import uuid from "react-uuid";
+import CheckBox from "./components/checkBox/CheckBox";
 // import axios from "./components/axios";
 class App extends Component {
   constructor() {
@@ -309,10 +310,16 @@ class App extends Component {
           deleteSelected={this.deleteSelected}
           markSelected={this.markSelected}
           inputFocus={this.inputFocus}
-          selectAndDeselectAll={this.selectAndDeselectAll}
-          checked={this.state.checked}
           edited={this.state.editItem}
-        />
+          checkBox={
+            <CheckBox
+              id={"todoSelectDeslectAll"}
+              checked={this.state.checked}
+              handleCheckBox={this.selectAndDeselectAll}
+              label={"Select / Deselect All"}
+            />
+          }
+        ></ActionBar>
         <div className="todoItemWrapper" id="todoItemWrapper" ref={this.myRef}>
           {this.state.todoListDetails.map(item => (
             <TodoItemContainer
@@ -327,14 +334,18 @@ class App extends Component {
               todoItem={item.item}
               id={item.id}
               toggledClass={item.done}
-              checked={item.checked}
-              handleCheckBox={this.handleCheckBox}
               handleEditIcon={() => this.handleEditIcon(item.id)}
               expand={item.expand}
               dragOnStart={e => this.dragOnStart(e, item.id)}
               dragOnOver={e => this.dragOnOver(e, item.id)}
               dragOnDrop={e => this.dragOnDrop(e, item.id)}
-            />
+            >
+              <CheckBox
+                id={item.id}
+                checked={item.checked}
+                handleCheckBox={this.handleCheckBox}
+              />
+            </TodoItemContainer>
           ))}
         </div>
       </div>

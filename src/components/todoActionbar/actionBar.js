@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import CheckBox from "../checkBox/CheckBox";
+import Button from "../button/Button";
 
 class ActionBar extends Component {
   render() {
@@ -10,10 +10,9 @@ class ActionBar extends Component {
       addTodoOnEnter,
       markSelected,
       deleteSelected,
-      selectAndDeselectAll,
-      checked,
       edited,
-      inputFocus
+      inputFocus,
+      checkBox
     } = this.props;
 
     return (
@@ -25,7 +24,6 @@ class ActionBar extends Component {
           <input
             type="text"
             className="addTaskTextbox"
-            id="todoAddTextBox"
             autoFocus
             ref={inputFocus}
             placeholder="Enter the task to add"
@@ -33,42 +31,16 @@ class ActionBar extends Component {
             onChange={handleInputChange}
             onKeyPress={addTodoOnEnter}
           />
-          <button
-            type="button"
+          <Button
             className="todoAddButton"
-            id="todoAddbutton"
-            onClick={addTodoItem}
-          >
-            {edited ? "Save" : "Add"}
-          </button>
+            onclickHandler={addTodoItem}
+            label={edited ? "Save" : "Add"}
+          />
         </div>
         <div className="todoActionBar" id="todoActionBar">
-          <div className="checkBoxWrapper">
-            <CheckBox
-              id="todoSelectDeslectAll"
-              checked={checked}
-              handleCheckBox={selectAndDeselectAll}
-              label={"Select / Deselect All"}
-            />
-          </div>
-          <button
-            type="button"
-            className="todoButton"
-            id="todoDeleteSelectedButton"
-            onClick={deleteSelected}
-          >
-            {" "}
-            Delete Selected
-          </button>
-          <button
-            type="button"
-            className="todoButton"
-            id="todoMarkAllCompletedButton"
-            onClick={markSelected}
-          >
-            {" "}
-            Mark/UnMark Selected
-          </button>
+          <div className="checkBoxWrapper">{checkBox}</div>
+          <Button onclickHandler={deleteSelected} label="Delete Selected" />
+          <Button onclickHandler={markSelected} label="Mark/UnMark Selected" />
         </div>
         <hr className="myHrStyle" />
       </div>
