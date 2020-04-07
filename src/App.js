@@ -5,6 +5,9 @@ import "./App.css";
 import uuid from "react-uuid";
 import CheckBox from "./components/checkBox/CheckBox";
 // import axios from "./components/axios";
+require("dotenv").config();
+const API_URL = process.env.REACT_APP_API_URL;
+
 class App extends Component {
   constructor() {
     super();
@@ -14,54 +17,51 @@ class App extends Component {
       todoItemId: uuid(),
       checked: false,
       editItem: false,
-      loaded: false
+      loaded: false,
     };
     this.inputFocus = React.createRef();
   }
 
   componentDidMount() {
-    fetch("https://jsonplaceholder.typicode.com/todos")
-      .then(response => response.json())
-      .then(value => {
+    fetch(API_URL)
+      .then((response) => response.json())
+      .then((value) => {
         value = value.splice(0, 10);
-        let updatedItems = value.map(item => {
+        let updatedItems = value.map((item) => {
           return {
             id: `${item.id}`,
             item: item.title,
             title: item.title,
             done: false,
             checked: false,
-            expand: false
+            expand: false,
           };
         });
         this.setState({
-          todoListDetails: updatedItems
+          todoListDetails: updatedItems,
         });
       });
   }
 
   componentDidUpdate(prevProps, prevState) {
     /// to make the todoListDetails empty when something changes at first because of the default data
-    if (
-      prevState.loaded === false &&
-      prevState.todoItemId !== this.state.todoItemId
-    ) {
+    if (!prevState.loaded && prevState.todoItemId !== this.state.todoItemId) {
       this.setState({
         todoListDetails: [],
         loaded: true,
-        checked: false
+        checked: false,
       });
     }
     //// for checkbox checked if all the checkboxes are checked and viceversa
     let todoListDetails = this.state.todoListDetails;
-    let checkedItems = todoListDetails.filter(item => item.checked === true);
+    let checkedItems = todoListDetails.filter((item) => item.checked === true);
     if (todoListDetails.length) {
       if (
         checkedItems.length === todoListDetails.length &&
         prevState.checked === false
       ) {
         this.setState({
-          checked: true
+          checked: true,
         });
       }
       if (
@@ -69,7 +69,7 @@ class App extends Component {
         prevState.checked === true
       ) {
         this.setState({
-          checked: false
+          checked: false,
         });
       }
     }
@@ -79,10 +79,10 @@ class App extends Component {
     this.inputFocus.current.focus();
   };
 
-  handleInputChange = e => {
+  handleInputChange = (e) => {
     this.setState({
       todoItemDescription: e.target.value,
-      todoItemId: uuid()
+      todoItemId: uuid(),
     });
   };
 
@@ -93,7 +93,7 @@ class App extends Component {
       item: this.state.todoItemDescription,
       done: false,
       checked: false,
-      expand: false
+      expand: false,
     };
     if (!newTodoItem.item.trim()) {
       return;
@@ -104,71 +104,71 @@ class App extends Component {
       todoItemDescription: "",
       todoItemId: uuid(),
       checked: false,
-      editItem: false
+      editItem: false,
     });
     this.inputFocusHandler();
   };
 
-  addTodoOnEnter = e => {
+  addTodoOnEnter = (e) => {
     if (e.key === "Enter") {
       this.addTodoItem();
     }
   };
 
-  deleteSelected = e => {
-    let todoListDetails = this.state.todoListDetails.filter(item => {
+  deleteSelected = (e) => {
+    let todoListDetails = this.state.todoListDetails.filter((item) => {
       return item.checked === false;
     });
     if (this.state.checked) {
       this.setState({
         todoListDetails,
-        checked: false
+        checked: false,
       });
     } else {
       this.setState({
-        todoListDetails
+        todoListDetails,
       });
     }
   };
 
-  markSelected = e => {
-    const selectedItems = this.state.todoListDetails.filter(item => {
+  markSelected = (e) => {
+    const selectedItems = this.state.todoListDetails.filter((item) => {
       return item.checked === true;
     });
-    let updatedItems = selectedItems.map(item => {
+    let updatedItems = selectedItems.map((item) => {
       let temp = item.done;
       item.done = !temp;
       return item;
     });
     const todoListDetails = this.state.todoListDetails;
     for (let i = 0; i < updatedItems.length; i++) {
-      todoListDetails.forEach(item => {
+      todoListDetails.forEach((item) => {
         if (updatedItems[i].id === item.id) {
           item = updatedItems[i];
         }
       });
     }
     this.setState({
-      todoListDetails
+      todoListDetails,
     });
   };
 
-  selectAndDeselectAll = e => {
+  selectAndDeselectAll = (e) => {
     if (this.state.todoListDetails.length) {
       let todoListDetails = this.state.todoListDetails;
-      todoListDetails.forEach(item => (item.checked = e.target.checked));
+      todoListDetails.forEach((item) => (item.checked = e.target.checked));
       this.setState({
         todoListDetails,
-        checked: e.target.checked ? true : false
+        checked: e.target.checked ? true : false,
       });
     }
   };
 
-  handleCheckBox = e => {
+  handleCheckBox = (e) => {
     //changes
     //map to filter
     // else if(if (e.target.checked === false) ) to else
-    const todoListDetails = this.state.todoListDetails.map(item => {
+    const todoListDetails = this.state.todoListDetails.map((item) => {
       if (item.id === e.target.id) {
         if (e.target.checked === true) {
           item.checked = true;
@@ -179,21 +179,21 @@ class App extends Component {
       return item;
     });
     this.setState({
-      todoListDetails
+      todoListDetails,
     });
   };
 
-  deleteTodoItem = id => {
+  deleteTodoItem = (id) => {
     const filteredItems = this.state.todoListDetails.filter(
-      item => item.id !== id
+      (item) => item.id !== id
     );
     this.setState({
-      todoListDetails: filteredItems
+      todoListDetails: filteredItems,
     });
   };
 
-  todoItemStrikeThrough = e => {
-    let updatedItems = this.state.todoListDetails.map(item => {
+  todoItemStrikeThrough = (e) => {
+    let updatedItems = this.state.todoListDetails.map((item) => {
       if (item.id === e.target.id) {
         let temp = item.done;
         item.done = !temp;
@@ -201,17 +201,17 @@ class App extends Component {
       return item;
     });
     this.setState({
-      todoListDetails: updatedItems
+      todoListDetails: updatedItems,
     });
   };
 
-  saveTodoOnEnter = e => {
+  saveTodoOnEnter = (e) => {
     if (e.key === "Enter") {
       this.inputFocusHandler();
     }
   };
 
-  handleEditIcon = id => {
+  handleEditIcon = (id) => {
     if (this.state.todoItemDescription.length) {
       // eslint-disable-next-line no-restricted-globals
       let response = confirm("Click Ok to save the Todo Item");
@@ -222,24 +222,24 @@ class App extends Component {
       }
     } else {
       const filteredItems = this.state.todoListDetails.filter(
-        item => item.id !== id
+        (item) => item.id !== id
       );
       const selectedItems = this.state.todoListDetails.find(
-        item => item.id === id
+        (item) => item.id === id
       );
       this.setState({
         todoListDetails: filteredItems,
         todoItemDescription: selectedItems.item,
         editItem: true,
-        todoItemId: id
+        todoItemId: id,
       });
       this.inputFocusHandler();
     }
   };
 
-  showFullDetailsHandler = id => {
+  showFullDetailsHandler = (id) => {
     let todoListDetails = this.state.todoListDetails;
-    todoListDetails = todoListDetails.map(item => {
+    todoListDetails = todoListDetails.map((item) => {
       if (item.id === id) {
         if (item.expand === false) {
           item.expand = true;
@@ -250,7 +250,7 @@ class App extends Component {
       return item;
     });
     this.setState({
-      todoListDetails: todoListDetails
+      todoListDetails: todoListDetails,
     });
   };
 
@@ -284,7 +284,7 @@ class App extends Component {
       }
       todoListDetails[droppedItemIndex] = temp;
       this.setState({
-        todoListDetails
+        todoListDetails,
       });
     }
     if (draggedItemIndex > droppedItemIndex) {
@@ -294,7 +294,7 @@ class App extends Component {
       }
       todoListDetails[droppedItemIndex] = temp;
       this.setState({
-        todoListDetails
+        todoListDetails,
       });
     }
   };
@@ -321,7 +321,7 @@ class App extends Component {
           }
         ></ActionBar>
         <div className="todoItemWrapper" id="todoItemWrapper" ref={this.myRef}>
-          {this.state.todoListDetails.map(item => (
+          {this.state.todoListDetails.map((item) => (
             <TodoItemContainer
               key={item.id}
               deleteTodoItem={() => this.deleteTodoItem(item.id)}
@@ -336,9 +336,9 @@ class App extends Component {
               toggledClass={item.done}
               handleEditIcon={() => this.handleEditIcon(item.id)}
               expand={item.expand}
-              dragOnStart={e => this.dragOnStart(e, item.id)}
-              dragOnOver={e => this.dragOnOver(e, item.id)}
-              dragOnDrop={e => this.dragOnDrop(e, item.id)}
+              dragOnStart={(e) => this.dragOnStart(e, item.id)}
+              dragOnOver={(e) => this.dragOnOver(e, item.id)}
+              dragOnDrop={(e) => this.dragOnDrop(e, item.id)}
             >
               <CheckBox
                 id={item.id}

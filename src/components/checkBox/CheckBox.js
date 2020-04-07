@@ -1,10 +1,10 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 
 class CheckBox extends Component {
   render() {
     const { id, checked, handleCheckBox, label } = this.props;
     return (
-      <Fragment>
+      <>
         <div className="pretty p-icon p-round p-jelly">
           <input
             type="checkbox"
@@ -18,7 +18,7 @@ class CheckBox extends Component {
             <label>{label}</label>
           </div>
         </div>
-      </Fragment>
+      </>
     );
   }
 }

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { FiTrash2 } from "react-icons/fi";
 import { FaStrikethrough } from "react-icons/fa";
 import { FaEdit } from "react-icons/fa";
-import "./itemContainer.css";
+import styles from "./../css-modules/App.module.css";
 
 class TodoItemContainer extends Component {
   render() {
@@ -19,13 +19,13 @@ class TodoItemContainer extends Component {
       expand,
       dragOnStart,
       dragOnOver,
-      dragOnDrop
+      dragOnDrop,
     } = this.props;
 
     const checkBox = this.props.children;
     return (
       <div
-        className="todoItemContainer"
+        className={styles.todoItemContainer}
         id="todoItemContainer"
         draggable={true}
         onDragStart={dragOnStart}
