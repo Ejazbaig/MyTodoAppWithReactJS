@@ -12,7 +12,7 @@ class ActionBar extends Component {
       deleteSelected,
       edited,
       inputFocus,
-      checkBox
+      checkBox,
     } = this.props;
 
     return (

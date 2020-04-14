@@ -5,8 +5,8 @@ import "./App.css";
 import uuid from "react-uuid";
 import CheckBox from "./components/checkBox/CheckBox";
 // import axios from "./components/axios";
-require("dotenv").config();
-const API_URL = process.env.REACT_APP_API_URL;
+// require("dotenv").config();
+// const API_URL = process.env.REACT_APP_API_URL;
 
 class App extends Component {
   constructor() {
@@ -22,36 +22,58 @@ class App extends Component {
     this.inputFocus = React.createRef();
   }
 
+  // componentDidMount() {
+  ///// random API data to display when loaded
+  //   fetch(API_URL)
+  //     .then((response) => response.json())
+  //     .then((value) => {
+  //       value = value.splice(0, 10);
+  //       let updatedItems = value.map((item) => {
+  //         return {
+  //           id: `${item.id}`,
+  //           item: item.title,
+  //           title: item.title,
+  //           done: false,
+  //           checked: false,
+  //           expand: false,
+  //         };
+  //       });
+  //       this.setState({
+  //         todoListDetails: updatedItems,
+  //       });
+  //     });
+  // }
+
   componentDidMount() {
-    fetch(API_URL)
-      .then((response) => response.json())
-      .then((value) => {
-        value = value.splice(0, 10);
-        let updatedItems = value.map((item) => {
-          return {
-            id: `${item.id}`,
-            item: item.title,
-            title: item.title,
-            done: false,
-            checked: false,
-            expand: false,
-          };
-        });
-        this.setState({
-          todoListDetails: updatedItems,
-        });
-      });
+    const localStorageItems = { ...localStorage };
+    let myArray = [];
+    for (let [id, item] of Object.entries(localStorageItems)) {
+      item = JSON.parse(item);
+      const newTodoItem = {
+        id: id,
+        title: item[0].substring(0, 100),
+        item: item[0],
+        done: false,
+        checked: false,
+        expand: false,
+      };
+      myArray.push(newTodoItem);
+    }
+    this.setState({
+      todoListDetails: myArray,
+    });
   }
 
   componentDidUpdate(prevProps, prevState) {
-    /// to make the todoListDetails empty when something changes at first because of the default data
-    if (!prevState.loaded && prevState.todoItemId !== this.state.todoItemId) {
-      this.setState({
-        todoListDetails: [],
-        loaded: true,
-        checked: false,
-      });
-    }
+    /// to make the todoListDetails empty when something changes at first because of the default API data
+    // if (!prevState.loaded && prevState.todoItemId !== this.state.todoItemId) {
+    //   this.setState({
+    //     todoListDetails: [],
+    //     loaded: true,
+    //     checked: false,
+    //   });
+    // }
+
     //// for checkbox checked if all the checkboxes are checked and viceversa
     let todoListDetails = this.state.todoListDetails;
     let checkedItems = todoListDetails.filter((item) => item.checked === true);
@@ -98,6 +120,8 @@ class App extends Component {
     if (!newTodoItem.item.trim()) {
       return;
     }
+    const data = [newTodoItem.item, newTodoItem.index];
+    localStorage.setItem(newTodoItem.id, JSON.stringify(data));
     const updatedItems = [newTodoItem, ...this.state.todoListDetails];
     this.setState({
       todoListDetails: updatedItems,
@@ -117,6 +141,9 @@ class App extends Component {
 
   deleteSelected = (e) => {
     let todoListDetails = this.state.todoListDetails.filter((item) => {
+      if (item.checked === true) {
+        localStorage.removeItem(item.id);
+      }
       return item.checked === false;
     });
     if (this.state.checked) {
@@ -132,22 +159,13 @@ class App extends Component {
   };
 
   markSelected = (e) => {
-    const selectedItems = this.state.todoListDetails.filter((item) => {
-      return item.checked === true;
-    });
-    let updatedItems = selectedItems.map((item) => {
-      let temp = item.done;
-      item.done = !temp;
+    let todoListDetails = this.state.todoListDetails.filter((item) => {
+      if (item.checked === true) {
+        let temp = item.done;
+        item.done = !temp;
+      }
       return item;
     });
-    const todoListDetails = this.state.todoListDetails;
-    for (let i = 0; i < updatedItems.length; i++) {
-      todoListDetails.forEach((item) => {
-        if (updatedItems[i].id === item.id) {
-          item = updatedItems[i];
-        }
-      });
-    }
     this.setState({
       todoListDetails,
     });
@@ -165,9 +183,6 @@ class App extends Component {
   };
 
   handleCheckBox = (e) => {
-    //changes
-    //map to filter
-    // else if(if (e.target.checked === false) ) to else
     const todoListDetails = this.state.todoListDetails.map((item) => {
       if (item.id === e.target.id) {
         if (e.target.checked === true) {
@@ -187,6 +202,7 @@ class App extends Component {
     const filteredItems = this.state.todoListDetails.filter(
       (item) => item.id !== id
     );
+    localStorage.removeItem(id);
     this.setState({
       todoListDetails: filteredItems,
     });
@@ -257,9 +273,11 @@ class App extends Component {
   dragOnStart = (e, id) => {
     e.dataTransfer.setData("id", id);
   };
+
   dragOnOver = (e, id) => {
     e.preventDefault();
   };
+
   dragOnDrop = (e, id) => {
     e.preventDefault();
     let draggedItemId = e.dataTransfer.getData("Id");
