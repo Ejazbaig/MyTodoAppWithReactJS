@@ -9,40 +9,15 @@ import CheckBox from "./components/checkBox/CheckBox";
 // const API_URL = process.env.REACT_APP_API_URL;
 
 class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      todoListDetails: [],
-      todoItemDescription: "",
-      todoItemId: uuid(),
-      checked: false,
-      editItem: false,
-      loaded: false,
-    };
-    this.inputFocus = React.createRef();
-  }
-
-  // componentDidMount() {
-  ///// random API data to display when loaded
-  //   fetch(API_URL)
-  //     .then((response) => response.json())
-  //     .then((value) => {
-  //       value = value.splice(0, 10);
-  //       let updatedItems = value.map((item) => {
-  //         return {
-  //           id: `${item.id}`,
-  //           item: item.title,
-  //           title: item.title,
-  //           done: false,
-  //           checked: false,
-  //           expand: false,
-  //         };
-  //       });
-  //       this.setState({
-  //         todoListDetails: updatedItems,
-  //       });
-  //     });
-  // }
+  state = {
+    todoListDetails: [],
+    todoItemDescription: "",
+    todoItemId: uuid(),
+    checked: false,
+    editItem: false,
+    loaded: false,
+  };
+  inputFocus = React.createRef();
 
   componentDidMount() {
     const localStorageItems = { ...localStorage };
@@ -65,15 +40,6 @@ class App extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    /// to make the todoListDetails empty when something changes at first because of the default API data
-    // if (!prevState.loaded && prevState.todoItemId !== this.state.todoItemId) {
-    //   this.setState({
-    //     todoListDetails: [],
-    //     loaded: true,
-    //     checked: false,
-    //   });
-    // }
-
     //// for checkbox checked if all the checkboxes are checked and viceversa
     let todoListDetails = this.state.todoListDetails;
     let checkedItems = todoListDetails.filter((item) => item.checked === true);
@@ -82,6 +48,7 @@ class App extends Component {
         checkedItems.length === todoListDetails.length &&
         prevState.checked === false
       ) {
+        console.log("updated1");
         this.setState({
           checked: true,
         });
@@ -90,6 +57,7 @@ class App extends Component {
         checkedItems.length !== todoListDetails.length &&
         prevState.checked === true
       ) {
+        console.log("updated2");
         this.setState({
           checked: false,
         });
