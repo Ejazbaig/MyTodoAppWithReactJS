@@ -13,6 +13,8 @@ class ActionBar extends Component {
       edited,
       inputFocus,
       checkBox,
+      taskValidator,
+      completedTasks,
     } = this.props;
 
     return (
@@ -41,6 +43,10 @@ class ActionBar extends Component {
           <div className="checkBoxWrapper">{checkBox}</div>
           <Button onclickHandler={deleteSelected} label="Delete Selected" />
           <Button onclickHandler={markSelected} label="Mark/UnMark Selected" />
+          <Button
+            onclickHandler={taskValidator}
+            label={completedTasks ? "Tasks to complete" : "Completed Tasks"}
+          />
         </div>
         <hr className="myHrStyle" />
       </div>

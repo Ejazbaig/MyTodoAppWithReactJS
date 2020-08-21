@@ -16,6 +16,7 @@ class App extends Component {
     checked: false,
     editItem: false,
     loaded: false,
+    completedTasks: false,
   };
   inputFocus = React.createRef();
 
@@ -28,7 +29,7 @@ class App extends Component {
         id: id,
         title: item[0].substring(0, 100),
         item: item[0],
-        done: false,
+        done: item[1],
         checked: false,
         expand: false,
       };
@@ -48,19 +49,61 @@ class App extends Component {
         checkedItems.length === todoListDetails.length &&
         prevState.checked === false
       ) {
-        console.log("updated1");
         this.setState({
           checked: true,
         });
       }
+
+      let incompleteTodoListTasks = todoListDetails.filter(
+        (item) => item.done === false
+      );
+      let completedTodoListTasks = todoListDetails.filter(
+        (item) => item.done === true
+      );
       if (
-        checkedItems.length !== todoListDetails.length &&
-        prevState.checked === true
+        this.state.completedTasks === false &&
+        incompleteTodoListTasks.length
       ) {
-        console.log("updated2");
-        this.setState({
-          checked: false,
-        });
+        let checkedItems = incompleteTodoListTasks.filter(
+          (item) => item.checked === true
+        );
+        if (
+          checkedItems.length === incompleteTodoListTasks.length &&
+          prevState.checked === false
+        ) {
+          this.setState({
+            checked: true,
+          });
+        }
+        if (
+          checkedItems.length !== incompleteTodoListTasks.length &&
+          prevState.checked === true
+        ) {
+          this.setState({
+            checked: false,
+          });
+        }
+      }
+      if (this.state.completedTasks && completedTodoListTasks.length) {
+        let checkedItems = completedTodoListTasks.filter(
+          (item) => item.checked === true
+        );
+        if (
+          checkedItems.length === completedTodoListTasks.length &&
+          prevState.checked === false
+        ) {
+          this.setState({
+            checked: true,
+          });
+        }
+        if (
+          checkedItems.length !== completedTodoListTasks.length &&
+          prevState.checked === true
+        ) {
+          this.setState({
+            checked: false,
+          });
+        }
       }
     }
   }
@@ -88,7 +131,7 @@ class App extends Component {
     if (!newTodoItem.item.trim()) {
       return;
     }
-    const data = [newTodoItem.item, newTodoItem.index];
+    const data = [newTodoItem.item, newTodoItem.done];
     localStorage.setItem(newTodoItem.id, JSON.stringify(data));
     const updatedItems = [newTodoItem, ...this.state.todoListDetails];
     this.setState({
@@ -97,6 +140,7 @@ class App extends Component {
       todoItemId: uuid(),
       checked: false,
       editItem: false,
+      completedTasks: false,
     });
     this.inputFocusHandler();
   };
@@ -131,6 +175,13 @@ class App extends Component {
       if (item.checked === true) {
         let temp = item.done;
         item.done = !temp;
+        item.checked = false;
+        let tempData = localStorage.getItem(item.id);
+        let tempItem = JSON.parse(tempData);
+        console.log(tempItem);
+        tempItem[1] = !temp;
+        console.log(tempItem);
+        localStorage.setItem(item.id, JSON.stringify(tempItem));
       }
       return item;
     });
@@ -142,7 +193,24 @@ class App extends Component {
   selectAndDeselectAll = (e) => {
     if (this.state.todoListDetails.length) {
       let todoListDetails = this.state.todoListDetails;
-      todoListDetails.forEach((item) => (item.checked = e.target.checked));
+      if (this.state.completedTasks) {
+        todoListDetails = todoListDetails.map((item) => {
+          if (item.done === true) {
+            item.checked = e.target.checked;
+          }
+          return item;
+        });
+      }
+      if (!this.state.completedTasks) {
+        todoListDetails = todoListDetails.map((item) => {
+          if (item.done === false) {
+            item.checked = e.target.checked;
+          }
+          return item;
+        });
+      }
+
+      // todoListDetails.forEach((item) => (item.checked = e.target.checked));
       this.setState({
         todoListDetails,
         checked: e.target.checked ? true : false,
@@ -181,6 +249,10 @@ class App extends Component {
       if (item.id === e.target.id) {
         let temp = item.done;
         item.done = !temp;
+        let tempData = localStorage.getItem(item.id);
+        let tempItem = JSON.parse(tempData);
+        tempItem[1] = !temp;
+        localStorage.setItem(item.id, JSON.stringify(tempItem));
       }
       return item;
     });
@@ -238,6 +310,12 @@ class App extends Component {
     });
   };
 
+  taskValidator = () => {
+    this.setState({
+      completedTasks: !this.state.completedTasks,
+    });
+  };
+
   dragOnStart = (e, id) => {
     e.dataTransfer.setData("id", id);
   };
@@ -286,6 +364,17 @@ class App extends Component {
   };
 
   render() {
+    let finalTodoListDetails;
+    if (this.state.completedTasks) {
+      finalTodoListDetails = this.state.todoListDetails.filter(
+        (item) => item.done === true
+      );
+    }
+    if (!this.state.completedTasks) {
+      finalTodoListDetails = this.state.todoListDetails.filter(
+        (item) => item.done === false
+      );
+    }
     return (
       <div>
         <ActionBar
@@ -297,6 +386,8 @@ class App extends Component {
           markSelected={this.markSelected}
           inputFocus={this.inputFocus}
           edited={this.state.editItem}
+          taskValidator={this.taskValidator}
+          completedTasks={this.state.completedTasks}
           checkBox={
             <CheckBox
               id={"todoSelectDeslectAll"}
@@ -307,7 +398,7 @@ class App extends Component {
           }
         ></ActionBar>
         <div className="todoItemWrapper" id="todoItemWrapper" ref={this.myRef}>
-          {this.state.todoListDetails.map((item) => (
+          {finalTodoListDetails.map((item) => (
             <TodoItemContainer
               key={item.id}
               deleteTodoItem={() => this.deleteTodoItem(item.id)}
