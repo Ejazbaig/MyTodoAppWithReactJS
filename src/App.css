@@ -30,6 +30,23 @@ html {
   align-items: center;
 }
 
+.todoActionBar {
+  flex-wrap: wrap;
+}
+
+@media screen and (max-width: 767px) and (min-width: 200px) {
+  .checkBoxWrapper {
+    width: 100% !important;
+    text-align: center;
+    margin: 10px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .todoButton {
+    width: 30% !important;
+    height: 40px !important;
+  }
+}
+
 .addTaskTextbox {
   width: 60%;
   height: 30px;
@@ -81,8 +98,8 @@ html {
 }
 
 .todoButton {
-  height: 40px;
-  width: 150px;
+  height: 35px;
+  width: 12%;
 }
 
 .todoListWrapper {
@@ -170,4 +187,10 @@ html {
   font-size: 17px;
   overflow-wrap: break-word;
   text-decoration: line-through;
+}
+
+.myMessageDiv {
+  align-items: center;
+  text-align: center;
+  margin-top: 80px;
 }
