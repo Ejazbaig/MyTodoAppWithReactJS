@@ -105,6 +105,24 @@ class App extends Component {
           });
         }
       }
+      ////  to check if all the items in completed tasks or incompleted tasks are marked or unmarked, then the select and deslect button should be off
+      if (this.state.checked) {
+        if (
+          (!this.state.completedTasks &&
+            incompleteTodoListTasks.length === 0) ||
+          (this.state.completedTasks && completedTodoListTasks.length === 0)
+        ) {
+          this.setState({
+            checked: false,
+          });
+        }
+      }
+    }
+    //// if the last item in the list is deleted by its own delete handler then select and deselct all was not vanishing. so with this its resolved
+    if (prevState.todoListDetails.length && todoListDetails.length === 0) {
+      this.setState({
+        checked: false,
+      });
     }
   }
 
@@ -122,7 +140,10 @@ class App extends Component {
   addTodoItem = () => {
     const newTodoItem = {
       id: this.state.todoItemId,
-      title: this.state.todoItemDescription.substring(0, 100),
+      title:
+        this.state.todoItemDescription.length > 97
+          ? this.state.todoItemDescription.substring(0, 100) + "..."
+          : this.state.todoItemDescription.substring(0, 100),
       item: this.state.todoItemDescription,
       done: false,
       checked: false,
@@ -178,9 +199,7 @@ class App extends Component {
         item.checked = false;
         let tempData = localStorage.getItem(item.id);
         let tempItem = JSON.parse(tempData);
-        console.log(tempItem);
         tempItem[1] = !temp;
-        console.log(tempItem);
         localStorage.setItem(item.id, JSON.stringify(tempItem));
       }
       return item;
@@ -249,6 +268,7 @@ class App extends Component {
       if (item.id === e.target.id) {
         let temp = item.done;
         item.done = !temp;
+        item.checked = false;
         let tempData = localStorage.getItem(item.id);
         let tempItem = JSON.parse(tempData);
         tempItem[1] = !temp;
@@ -375,6 +395,10 @@ class App extends Component {
         (item) => item.done === false
       );
     }
+    //// to display message if no items are present (dynamically)
+    let myMessage = this.state.completedTasks
+      ? "Tasks which are completed are shown here, please complete a task"
+      : "Tasks which are yet to be done are shown here, please add a task";
     return (
       <div>
         <ActionBar
@@ -398,32 +422,36 @@ class App extends Component {
           }
         ></ActionBar>
         <div className="todoItemWrapper" id="todoItemWrapper" ref={this.myRef}>
-          {finalTodoListDetails.map((item) => (
-            <TodoItemContainer
-              key={item.id}
-              deleteTodoItem={() => this.deleteTodoItem(item.id)}
-              todoItemStrikeThrough={this.todoItemStrikeThrough}
-              saveTodoOnEnter={this.saveTodoOnEnter}
-              showFullDetailsHandler={() =>
-                this.showFullDetailsHandler(item.id)
-              }
-              todoItemTitle={item.title}
-              todoItem={item.item}
-              id={item.id}
-              toggledClass={item.done}
-              handleEditIcon={() => this.handleEditIcon(item.id)}
-              expand={item.expand}
-              dragOnStart={(e) => this.dragOnStart(e, item.id)}
-              dragOnOver={(e) => this.dragOnOver(e, item.id)}
-              dragOnDrop={(e) => this.dragOnDrop(e, item.id)}
-            >
-              <CheckBox
+          {finalTodoListDetails.length ? (
+            finalTodoListDetails.map((item) => (
+              <TodoItemContainer
+                key={item.id}
+                deleteTodoItem={() => this.deleteTodoItem(item.id)}
+                todoItemStrikeThrough={this.todoItemStrikeThrough}
+                saveTodoOnEnter={this.saveTodoOnEnter}
+                showFullDetailsHandler={() =>
+                  this.showFullDetailsHandler(item.id)
+                }
+                todoItemTitle={item.title}
+                todoItem={item.item}
                 id={item.id}
-                checked={item.checked}
-                handleCheckBox={this.handleCheckBox}
-              />
-            </TodoItemContainer>
-          ))}
+                toggledClass={item.done}
+                handleEditIcon={() => this.handleEditIcon(item.id)}
+                expand={item.expand}
+                dragOnStart={(e) => this.dragOnStart(e, item.id)}
+                dragOnOver={(e) => this.dragOnOver(e, item.id)}
+                dragOnDrop={(e) => this.dragOnDrop(e, item.id)}
+              >
+                <CheckBox
+                  id={item.id}
+                  checked={item.checked}
+                  handleCheckBox={this.handleCheckBox}
+                />
+              </TodoItemContainer>
+            ))
+          ) : (
+            <p className="myMessageDiv">{myMessage}</p>
+          )}
         </div>
       </div>
     );
