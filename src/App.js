@@ -303,6 +303,7 @@ class App extends Component {
       const selectedItems = this.state.todoListDetails.find(
         (item) => item.id === id
       );
+    localStorage.removeItem(id);
       this.setState({
         todoListDetails: filteredItems,
         todoItemDescription: selectedItems.item,
