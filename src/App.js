@@ -296,8 +296,8 @@ class App extends Component {
       } else {
         alert("Please edit and save the todo Item");
       }
-    } else {
-      const filteredItems = this.state.todoListDetails.filter(
+    } 
+    const filteredItems = this.state.todoListDetails.filter(
         (item) => item.id !== id
       );
       const selectedItems = this.state.todoListDetails.find(
@@ -310,7 +310,6 @@ class App extends Component {
         todoItemId: id,
       });
       this.inputFocusHandler();
-    }
   };
 
   showFullDetailsHandler = (id) => {
